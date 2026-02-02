@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'player.dart';
 
 part 'board.freezed.dart';
 
 @freezed
-class Board with _$Board {
+abstract class Board with _$Board {
   const Board._();
 
   const factory Board({required List<Player?> grid}) = _Board;
