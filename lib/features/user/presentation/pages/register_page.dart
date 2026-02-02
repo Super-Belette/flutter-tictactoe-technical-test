@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tic_tac_toe/core/theme/app_colors.dart';
+import 'package:tic_tac_toe/core/theme/app_dimens.dart';
 
 import '../controllers/user_controller.dart';
 
@@ -43,10 +45,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final isLoading = ref.watch(userControllerProvider).isLoading;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E), // Dark theme background
+      backgroundColor: AppColors.surface,
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(AppDimens.pagePadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -56,7 +58,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   letterSpacing: 2,
                 ),
               ).animate().fadeIn().moveY(begin: -20, end: 0),
@@ -66,7 +68,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               // 2. Avatar Selector
               const Text(
                 'Choose your fighter',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: AppColors.textSecondary),
               ),
               const SizedBox(height: 16),
               Wrap(
@@ -81,10 +83,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.yellow : Colors.white10,
+                        color:
+                            isSelected ? AppColors.primary : AppColors.surface,
                         shape: BoxShape.circle,
                         border: isSelected
-                            ? Border.all(color: Colors.yellowAccent, width: 3)
+                            ? Border.all(
+                                color: AppColors.primaryVariant, width: 3)
                             : null,
                       ),
                       child: Text(
@@ -101,12 +105,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               // 3. Nickname Input
               TextField(
                 controller: _nicknameController,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white10,
                   hintText: 'Enter your nickname',
-                  hintStyle: const TextStyle(color: Colors.white30),
+                  hintStyle: const TextStyle(color: AppColors.textDisabled),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -124,7 +128,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _onStartGame,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow, // BetClic vibes
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

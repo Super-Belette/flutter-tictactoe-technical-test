@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/providers/shared_prefs_provider.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,24 +22,16 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
-  // Change to ConsumerWidget to access ref
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the router provider
     final router = ref.watch(goRouterProvider);
 
     return MaterialApp.router(
       title: 'TicTacToe Challenge',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.yellow,
-        useMaterial3: true,
-        // Add GoogleFonts here later if you want
-      ),
-      // Connect GoRouter
+      theme: AppTheme.darkTheme,
       routerConfig: router,
     );
   }
