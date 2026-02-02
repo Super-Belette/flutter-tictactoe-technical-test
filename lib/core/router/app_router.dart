@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/game/presentation/pages/game_page.dart';
 import '../../features/user/presentation/controllers/user_controller.dart';
 import '../../features/user/presentation/pages/register_page.dart';
 
@@ -53,8 +54,7 @@ GoRouter goRouter(Ref ref) {
       ),
       GoRoute(
         path: '/game',
-        builder: (context, state) => const Scaffold(
-            body: Center(child: Text("Game Page (Coming Soon)"))),
+        builder: (context, state) => const GamePage(),
       ),
     ],
   );
