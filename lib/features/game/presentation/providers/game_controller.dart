@@ -1,22 +1,16 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../data/datasources/random_ai_strategy.dart';
 import '../../domain/entities/game_status.dart';
 import '../../domain/entities/player.dart';
-import '../../domain/repositories/ai_strategy.dart';
+import '../../domain/repositories/ai_strategy_provider.dart';
 import 'game_state.dart';
 
 part 'game_controller.g.dart';
 
 @riverpod
 class GameController extends _$GameController {
-  // Dependency: The AI Strategy
-  late final AiStrategy _aiStrategy;
-
   @override
   GameState build() {
-    // In a real app, we would inject this via a Provider for better testing
-    _aiStrategy = RandomAiStrategy();
     return GameState.initial();
   }
 
@@ -87,8 +81,10 @@ class GameController extends _$GameController {
     state = state.copyWith(isAiThinking: true);
 
     try {
+      final strategy = ref.read(aiStrategyProvider);
+
       // Ask the strategy for the best move
-      final aiMoveIndex = await _aiStrategy.nextMove(state.board);
+      final aiMoveIndex = await strategy.nextMove(state.board);
 
       // If AI found a move (should always be true unless board full)
       if (aiMoveIndex != null) {

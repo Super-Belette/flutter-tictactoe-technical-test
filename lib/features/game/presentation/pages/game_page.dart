@@ -25,6 +25,8 @@ class GamePage extends ConsumerWidget {
 
     // 3. Listener for Game Over (Side Effect)
     ref.listen(gameControllerProvider, (previous, next) {
+      if (previous?.status == next.status) return;
+
       next.status.maybeMap(
         victory: (winner) =>
             _showEndGameDialog(context, ref, winner: winner.winner),
@@ -46,56 +48,62 @@ class GamePage extends ConsumerWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimens.pagePadding),
-        child: Column(
-          children: [
-            const SizedBox(height: AppDimens.m),
-
-            // --- HEADER: PLAYERS ---
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: SingleChildScrollView(
+            padding:
+                const EdgeInsets.symmetric(horizontal: AppDimens.pagePadding),
+            child: Column(
               children: [
-                _PlayerInfo(
-                  name: user?.nickname ?? 'Player',
-                  avatar: user?.avatarPath ?? '😎',
-                  isActive: !isAiTurn,
-                  color: AppColors.playerX,
+                const SizedBox(height: AppDimens.m),
+
+                // --- HEADER: PLAYERS ---
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _PlayerInfo(
+                      name: user?.nickname ?? 'Player',
+                      avatar: user?.avatarPath ?? '😎',
+                      isActive: !isAiTurn,
+                      color: AppColors.playerX,
+                    ),
+                    const Text('VS',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.grey)),
+                    _PlayerInfo(
+                      name: 'BetBot 3000',
+                      avatar: '🤖',
+                      isActive: isAiTurn,
+                      color: AppColors.playerO,
+                    ),
+                  ],
                 ),
-                const Text('VS',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.grey)),
-                _PlayerInfo(
-                  name: 'BetBot 3000',
-                  avatar: '🤖',
-                  isActive: isAiTurn,
-                  color: AppColors.playerO,
+
+                const SizedBox(height: AppDimens.l),
+
+                // --- ODDS WIDGET (BONUS) ---
+                const OddsBanner(),
+
+                const SizedBox(height: AppDimens.xl),
+
+                // --- THE BOARD ---
+                const GameBoard(),
+
+                const SizedBox(height: AppDimens.l),
+
+                // --- STATUS TEXT ---
+                Text(
+                  isAiTurn ? 'Wait, AI is thinking...' : 'Your turn!',
+                  style: TextStyle(
+                    color: isAiTurn ? Colors.grey : AppColors.primary,
+                    fontSize: 16,
+                  ),
                 ),
+                const SizedBox(height: AppDimens.xxl),
               ],
             ),
-
-            const SizedBox(height: AppDimens.l),
-
-            // --- ODDS WIDGET (BONUS) ---
-            const OddsBanner(),
-
-            const SizedBox(height: AppDimens.xl),
-
-            // --- THE BOARD ---
-            const GameBoard(),
-
-            const Spacer(),
-
-            // --- STATUS TEXT ---
-            Text(
-              isAiTurn ? 'Wait, AI is thinking...' : 'Your turn!',
-              style: TextStyle(
-                color: isAiTurn ? Colors.grey : AppColors.primary,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: AppDimens.xxl),
-          ],
+          ),
         ),
       ),
     );
