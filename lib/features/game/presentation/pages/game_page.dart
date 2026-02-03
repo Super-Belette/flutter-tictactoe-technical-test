@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../user/presentation/controllers/user_controller.dart';
 import '../../domain/entities/player.dart';
+import '../../domain/repositories/ai_strategy_provider.dart';
 import '../providers/game_controller.dart';
 import '../widgets/game_board.dart';
 import '../widgets/odds_banner.dart';
@@ -22,6 +23,9 @@ class GamePage extends ConsumerWidget {
     // 2. Game Info
     final gameState = ref.watch(gameControllerProvider);
     final isAiTurn = gameState.currentTurn == Player.o;
+    final difficulty = ref.watch(difficultyProvider);
+    final botName =
+        difficulty == GameDifficulty.hard ? 'MiniMaxBot' : 'RandomBot';
 
     // 3. Listener for Game Over (Side Effect)
     ref.listen(gameControllerProvider, (previous, next) {
@@ -41,6 +45,24 @@ class GamePage extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         actions: [
+          Row(
+            children: [
+              Text(
+                difficulty == GameDifficulty.hard ? 'HARD' : 'EASY',
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              Switch(
+                value: difficulty == GameDifficulty.hard,
+                activeThumbColor: AppColors.error,
+                onChanged: (isHard) {
+                  ref.read(difficultyProvider.notifier).state =
+                      isHard ? GameDifficulty.hard : GameDifficulty.easy;
+                },
+              ),
+            ],
+          ),
+          // RESET BUTTON
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () =>
@@ -62,20 +84,27 @@ class GamePage extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _PlayerInfo(
-                      name: user?.nickname ?? 'Player',
-                      avatar: user?.avatarPath ?? '😎',
-                      isActive: !isAiTurn,
-                      color: AppColors.playerX,
+                    Expanded(
+                      child: _PlayerInfo(
+                        name: user?.nickname ?? 'Player',
+                        avatar: user?.avatarPath ?? '😎',
+                        isActive: !isAiTurn,
+                        color: AppColors.playerX,
+                      ),
                     ),
-                    const Text('VS',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.grey)),
-                    _PlayerInfo(
-                      name: 'BetBot 3000',
-                      avatar: '🤖',
-                      isActive: isAiTurn,
-                      color: AppColors.playerO,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppDimens.m),
+                      child: Text('VS',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.grey)),
+                    ),
+                    Expanded(
+                      child: _PlayerInfo(
+                        name: botName,
+                        avatar: '🤖',
+                        isActive: isAiTurn,
+                        color: AppColors.playerO,
+                      ),
                     ),
                   ],
                 ),
@@ -175,6 +204,7 @@ class _PlayerInfo extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       opacity: isActive ? 1.0 : 0.5,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundColor: isActive ? color : Colors.grey[800],
@@ -184,6 +214,8 @@ class _PlayerInfo extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: isActive ? color : Colors.grey,
               fontWeight: FontWeight.bold,
