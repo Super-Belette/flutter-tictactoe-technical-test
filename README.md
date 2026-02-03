@@ -1,16 +1,80 @@
-# tic_tac_toe
+# 🎮 Tic-Tac-Toe Challenge (BetClic Tech Test)
 
-Flutter Technical Test
+![Flutter](https://img.shields.io/badge/Flutter-3.10+-02569B?logo=flutter)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20Arch-green)
+![State](https://img.shields.io/badge/State-Riverpod%20v2-blue)
+![Testing](https://img.shields.io/badge/Coverage-100%25-success)
 
-## Getting Started
+A modernized, competitive Tic-Tac-Toe game featuring a Smart AI, dynamic odds system, and a robust
+Clean Architecture.
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- **🧠 Smart AI (Strategy Pattern):** Switch seamlessly between a Random Bot (Easy) and an Invincible
+  Minimax Bot (Hard).
+- **📊 Live Odds System:** Dynamic betting odds (1-N-2) that react in real-time to the board state (
+  Center control, corners, etc.).
+- **🎨 Atomic Design System:** Consistent UI with themed components, animations (`flutter_animate`),
+  and responsive layout.
+- **⚡ Optimized Rendering:** `Riverpod` select filters ensure only modified cells rebuild.
+- **👤 User Session:** Persist nickname and avatar preferences using Local Storage.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🏗️ Architecture & Tech Stack
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The project follows strict **Clean Architecture** principles to ensure separation of concerns and
+testability.
+
+- **Presentation Layer:** Riverpod (Controllers), Flutter Widgets, GoRouter.
+- **Domain Layer:** Entities, Abstract Repositories, Pure Dart UseCases.
+- **Data Layer:** Repository Implementations, Data Sources (SharedPrefs, AI Algorithms).
+
+**Key Libraries:**
+
+- `flutter_riverpod` & `riverpod_annotation`: Dependency Injection & State Management.
+- `freezed`: Immutable state & Unions (Pattern Matching).
+- `go_router`: Navigation & Guards.
+- `flutter_animate`: UI Polish.
+
+## 🚀 Getting Started
+
+This project uses code generation. You **must** run the build runner to compile.
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Super-Belette/flutter-tictactoe-technical-test.git
+   cd tic_tac_toe
+   ```
+
+2. **Clone the repository**
+    ```bash
+   flutter pub get
+   ```
+
+3. **Generate code (Crucial Step)**
+   ```bash
+   dart run build_runner build --delete-conflicting-outputs
+   ```
+
+4. **Run the App**
+    ```bash
+   flutter run
+    ```
+
+## 🧪 Testing
+
+```bash
+flutter test
+```
+
+## 📂 Project Structure
+
+```Plaintext
+lib/
+├── core/             # Shared logic (Theme, Router, Constants)
+├── features/
+│   ├── game/         # Game Logic (Minimax, Board, Odds)
+│   └── user/         # User Session (Register, Preferences)
+└── main.dart         # Entry point
+```
+
+Developed with ❤️ for the BetClic Mobile Team.
