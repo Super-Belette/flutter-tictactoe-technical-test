@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
@@ -70,13 +71,23 @@ class _GameCell extends ConsumerWidget {
 
   Widget _buildPlayerIcon(Player player) {
     final isX = player == Player.x;
-    return Icon(
-      isX ? Icons.close : Icons.circle_outlined,
-      size: 48,
-      color: isX ? AppColors.playerX : AppColors.playerO,
-    )
-        .animate()
-        .scale(duration: 200.ms, curve: Curves.easeOutBack) // "Pop" effect
-        .fadeIn();
+
+    return Text(
+      isX ? 'X' : 'O',
+      style: GoogleFonts.fredoka(
+        fontSize: 50,
+        fontWeight: FontWeight.w900,
+        color: isX ? AppColors.playerX : AppColors.playerO,
+        height: 1.0,
+        shadows: [
+          Shadow(
+            color: (isX ? AppColors.playerX : AppColors.playerO)
+                .withValues(alpha: 0.5),
+            blurRadius: 10,
+            offset: const Offset(0, 0),
+          ),
+        ],
+      ),
+    ).animate().scale(duration: 200.ms, curve: Curves.easeOutBack).fadeIn();
   }
 }
