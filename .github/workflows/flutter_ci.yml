@@ -1,4 +1,4 @@
-name: Flutter CI
+name: Flutter CI/CD
 
 on:
   push:
@@ -6,8 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +32,14 @@ jobs:
 
       - name: Run Tests
         run: flutter test
+
+      - name: Build Web App
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: flutter build web --release --base-href "/flutter-tictactoe-technical-test/"
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
