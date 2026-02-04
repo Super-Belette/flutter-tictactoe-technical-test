@@ -45,7 +45,7 @@ This project uses code generation. You **must** run the build runner to compile.
    cd tic_tac_toe
    ```
 
-2. **Clone the repository**
+2. **Install dependencies**
     ```bash
    flutter pub get
    ```
