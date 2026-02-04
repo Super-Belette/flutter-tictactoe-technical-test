@@ -16,6 +16,11 @@ import 'game_page_test.mocks.dart';
 void main() {
   testWidgets('Clicking on a cell should display X',
       (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(400, 900);
+    tester.view.devicePixelRatio = 1.0;
+
+    addTearDown(tester.view.resetPhysicalSize);
+
     // 1. SETUP MOCKS
     final mockAiStrategy = MockAiStrategy();
     final mockGetUserUseCase = MockGetUserUseCase();
@@ -37,16 +42,18 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 2. VERIFY INITIAL STATE
     expect(find.text('X'), findsNothing);
     expect(find.text('BetClic Arena'), findsOneWidget);
 
     // 3. ACT
+    await tester.ensureVisible(find.byType(GridView));
+
     await tester.tap(find.byType(GridView));
 
-    await tester.pumpAndSettle(); // Rebuild UI
+    await tester.pumpAndSettle();
 
     // 4. VERIFY
     expect(find.text('X'), findsOneWidget);

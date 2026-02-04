@@ -95,7 +95,7 @@ class GamePage extends ConsumerWidget {
                 // --- ODDS WIDGET  ---
                 const OddsBanner(),
 
-                const SizedBox(height: AppDimens.xl),
+                const SizedBox(height: AppDimens.m),
 
                 // --- CONTROLS WIDGET  ---
 
@@ -116,7 +116,7 @@ class GamePage extends ConsumerWidget {
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(height: AppDimens.xxl),
+                const SizedBox(height: AppDimens.xl),
               ],
             ),
           ),
