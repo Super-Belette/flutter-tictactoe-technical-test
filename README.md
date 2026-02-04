@@ -77,4 +77,22 @@ lib/
 └── main.dart         # Entry point
 ```
 
+## 🔮 Roadmap & Future Improvements
+
+This project was built as a scalable MVP. Here is how I would push it further for a production
+environment:
+
+### 📱 Product Features
+
+- **Online Multiplayer (PvP):** Replace the Local AI with a WebSocket connection (Firebase or Custom
+  Server) to play against real humans.
+- **Leaderboard:** Global ranking based on winning streaks (Database integration).
+- **Sound Design:** Add haptic feedback and sound effects for better game feel.
+
+### 🛠 Technical Enhancements
+
+- **Strict Linting:** Add `flutter_lints` with stricter rules.
+- **Golden Tests:** Add Golden Toolkit to prevent UI regressions on different screen sizes.
+- **Accessibility:** Ensure Screen Readers (TalkBack/VoiceOver) perfectly navigate the grid.
+
 Developed with ❤️ for the BetClic Mobile Team.

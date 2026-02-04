@@ -33,10 +33,12 @@ class UserController extends _$UserController {
     });
   }
 
-  /// Method to logout (optional, but good for testing)
+  /// Method to logout the user.
   Future<void> logout() async {
-    // TODO: Implement delete usecase if needed
-    // For now, we just reset the state
+    final deleteUser = ref.read(deleteUserUseCaseProvider);
+    await deleteUser();
+
+    // reset the state
     state = const AsyncValue.data(null);
   }
 }

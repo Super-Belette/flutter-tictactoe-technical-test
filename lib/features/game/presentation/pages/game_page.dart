@@ -45,29 +45,10 @@ class GamePage extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         actions: [
-          Row(
-            children: [
-              Text(
-                difficulty == GameDifficulty.hard ? 'HARD' : 'EASY',
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              Switch(
-                value: difficulty == GameDifficulty.hard,
-                activeThumbColor: AppColors.error,
-                onChanged: (isHard) {
-                  ref.read(difficultyProvider.notifier).state =
-                      isHard ? GameDifficulty.hard : GameDifficulty.easy;
-                },
-              ),
-            ],
-          ),
-          // RESET BUTTON
           IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () =>
-                ref.read(gameControllerProvider.notifier).resetGame(),
-          )
+            icon: const Icon(Icons.logout, color: AppColors.error),
+            onPressed: () => ref.read(userControllerProvider.notifier).logout(),
+          ),
         ],
       ),
       body: Center(
@@ -78,7 +59,7 @@ class GamePage extends ConsumerWidget {
                 const EdgeInsets.symmetric(horizontal: AppDimens.pagePadding),
             child: Column(
               children: [
-                const SizedBox(height: AppDimens.m),
+                const SizedBox(height: AppDimens.l),
 
                 // --- HEADER: PLAYERS ---
                 Row(
@@ -111,10 +92,16 @@ class GamePage extends ConsumerWidget {
 
                 const SizedBox(height: AppDimens.l),
 
-                // --- ODDS WIDGET (BONUS) ---
+                // --- ODDS WIDGET  ---
                 const OddsBanner(),
 
                 const SizedBox(height: AppDimens.xl),
+
+                // --- CONTROLS WIDGET  ---
+
+                const _GameControls(),
+
+                const SizedBox(height: AppDimens.m),
 
                 // --- THE BOARD ---
                 const GameBoard(),
@@ -223,6 +210,62 @@ class _PlayerInfo extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _GameControls extends ConsumerWidget {
+  const _GameControls();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final difficulty = ref.watch(difficultyProvider);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // DIFFICULTY SWITCH
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Row(
+            children: [
+              Text(
+                difficulty == GameDifficulty.hard ? 'HARD' : 'EASY',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: difficulty == GameDifficulty.hard
+                      ? AppColors.error
+                      : AppColors.primary,
+                ),
+              ),
+              Switch(
+                value: difficulty == GameDifficulty.hard,
+                activeThumbColor: AppColors.error,
+                onChanged: (isHard) {
+                  ref.read(difficultyProvider.notifier).state =
+                      isHard ? GameDifficulty.hard : GameDifficulty.easy;
+                },
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(width: 16),
+
+        // RESET BUTTON (Déplacé ici aussi pour l'ergonomie)
+        IconButton.filledTonal(
+          onPressed: () =>
+              ref.read(gameControllerProvider.notifier).resetGame(),
+          icon: const Icon(Icons.refresh),
+          tooltip: "Restart Game",
+        ),
+      ],
     );
   }
 }
