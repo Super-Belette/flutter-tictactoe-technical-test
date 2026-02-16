@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tic_tac_toe/features/game/domain/entities/game_history.dart';
 
 import '../../domain/entities/game_status.dart';
 import '../../domain/entities/player.dart';
@@ -43,7 +44,7 @@ class GameController extends _$GameController {
 
   /// Logic to reset the game
   void resetGame() {
-    state = GameState.initial();
+    state = GameState.initial().copyWith(history: state.history);
   }
 
   /// Internal method to apply a move on the board
@@ -57,11 +58,14 @@ class GameController extends _$GameController {
 
     // Check Game Over conditions
     GameStatus newStatus;
+    GameHistory newHistory = state.history;
 
     if (newBoard.winner != null) {
       newStatus = GameStatus.victory(newBoard.winner!);
+      newHistory = newHistory.addResult(newBoard.winner!);
     } else if (newBoard.isFull) {
       newStatus = const GameStatus.draw();
+      newHistory = newHistory.addResult(null);
     } else {
       // Game continues
       newStatus = GameStatus.playing(player.opponent);
@@ -72,6 +76,7 @@ class GameController extends _$GameController {
       board: newBoard,
       status: newStatus,
       currentTurn: player.opponent,
+      history: newHistory,
     );
   }
 
