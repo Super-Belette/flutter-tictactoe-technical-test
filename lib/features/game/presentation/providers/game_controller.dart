@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/entities/game_status.dart';
@@ -9,8 +11,13 @@ part 'game_controller.g.dart';
 
 @riverpod
 class GameController extends _$GameController {
+  Timer? _timer;
+
   @override
   GameState build() {
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
     return GameState.initial();
   }
 
@@ -67,6 +74,7 @@ class GameController extends _$GameController {
       newStatus = GameStatus.playing(player.opponent);
     }
 
+    _resetTimer();
     // Update State
     state = state.copyWith(
       board: newBoard,
@@ -93,6 +101,31 @@ class GameController extends _$GameController {
     } finally {
       // Release UI block
       state = state.copyWith(isAiThinking: false);
+    }
+  }
+
+  void _resetTimer() async {
+    _timer?.cancel();
+    state = state.copyWith(timeLeft: 5);
+    _timer = Timer.periodic(const Duration(milliseconds: 1), (timer) {
+      if (state.timeLeft > 0) {
+        state = state.copyWith(timeLeft: state.timeLeft - 1);
+      } else {
+        _onTimerEnd();
+      }
+    });
+  }
+
+  void _onTimerEnd() {
+    final playing = state.status.maybeMap(
+      playing: (_) => true,
+      orElse: () => false,
+    );
+
+    if (playing) {
+      _timer?.cancel();
+      final activePlayer = state.currentTurn;
+      state = state.copyWith(status: GameStatus.victory(activePlayer.opponent));
     }
   }
 }

@@ -13,6 +13,7 @@ class GameState with _$GameState {
     required GameStatus status,
     required Player currentTurn,
     @Default(false) bool isAiThinking,
+    @Default(5) int timeLeft,
   }) = _GameState;
 
   // Initial state factory
